@@ -1,6 +1,4 @@
-//
-// All utility related routes
-//
+const db = require('../db');
 const errors = require('restify-errors');
 const log = require('../logger');
 const { Router } = require('restify-router');

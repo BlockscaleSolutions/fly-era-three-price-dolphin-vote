@@ -2,6 +2,7 @@ version: '3'
 services:
   db-service:
     build: ./db-service
+    command: ["yarn", "start", "--db-host", "rethinkdb"]
     volumes:
       - ./db-service:/usr/src/db-service
     ports:
@@ -16,6 +17,7 @@ services:
     build: ./rethinkdb
     ports:
       - "8080:8080"
+      - "28015:28015"
     networks:
       testing_net:
         ipv4_address: 172.28.1.2

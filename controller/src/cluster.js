@@ -1,8 +1,11 @@
 const cluster = require('cluster');
 const log = require('./logger.js');
-const { SERVER_PORT, THREAD_COUNT } = require('./constants');
+const argv = require('./argv');
 
-initServerCluster(THREAD_COUNT);
+const serverPort = argv['server-port'];
+const threads = argv['threads'];
+
+initServerCluster(threads);
 
 /**
  * Initialize the server cluster with worker threads.
@@ -31,8 +34,8 @@ async function initServerCluster(threads) {
 
     const server = require('./server');
 
-    server.listen(SERVER_PORT, () => {
+    server.listen(serverPort, () => {
       log.info({ module: 'api' }, `${server.name} listening at ${server.url}`);
     });
   }
-}
+};

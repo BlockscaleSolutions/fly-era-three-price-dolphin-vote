@@ -1,11 +1,11 @@
 const argv = require('./argv');
-const db = require('./db');
 const corsMiddleware = require('restify-cors-middleware');
 const log = require('./logger.js');
 const restify = require('restify');
 const { getMethodAPI, getIP } = require('./utils');
 
 // routers
+const pingRouter = require('./routes/ping');
 const votesRouter = require('./routes/votes');
 
 // server config
@@ -13,15 +13,12 @@ const server = restify.createServer({
   log,
   version: '1.0.0',
   versions: ['1.0.0'],
-  name: 'template-service',
+  name: 'controller',
 });
 
 start();
 
 async function start() {
-  // Start db instance for each server
-  await db.init();
-
   const cors = corsMiddleware({
     preflightMaxAge: 5, // optional
     origins: ['*'],
@@ -44,6 +41,7 @@ async function start() {
   });
 
   // apply routes
+  pingRouter.applyRoutes(server);
   votesRouter.applyRoutes(server);
 }
 
