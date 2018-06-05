@@ -1,5 +1,5 @@
 //
-// Base logger utilized by all template-service modules
+// Base logger utilized by all service modules
 //
 const bunyan = require('bunyan');
 const cluster = require('cluster');
@@ -8,7 +8,7 @@ const PrettyStream = require('bunyan-prettystream');
 const prettyStdOut = new PrettyStream();
 prettyStdOut.pipe(process.stdout);
 
-let name = 'template-service';
+let name = 'db-service';
 
 // If a worker thread append id to name
 if (cluster.worker) {
@@ -20,10 +20,10 @@ const log = bunyan.createLogger({
   name,
   serializers: bunyan.stdSerializers,
   streams: [
-    {
-      path: './server.log',
-      level: 'debug',
-    },
+    // { TODO turn on logging for prod
+      // path: './server.log',
+      // level: 'debug',
+    // },
     {
       stream: prettyStdOut,
       level: 'debug',

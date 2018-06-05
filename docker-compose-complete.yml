@@ -1,0 +1,104 @@
+version: '3'
+services:
+   # Eth node for testing purposes
+  eth:
+    image: trufflesuite/ganache-cli
+    ports:
+      - "8545:8545"
+    command: -m "blg"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.4
+
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - eth
+    environment:
+      REACT_APP_API_URL: http://localhost
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.3
+
+  ipfs-service:
+    # image: blockchainlg/ipfs-service${TAG}
+    build: ./ipfs-service
+    volumes:
+      - ./ipfs-service:/usr/src/ipfs-service
+    ports:
+      - "3003:3003"
+    environment:
+      IPFS_URL: 'https://ipfs.infura.io'
+      IPFS_PORT: 5001
+    depends_on:
+      - eth
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.1
+
+  db-service:
+    # image: blockchainlg/db-service${TAG}
+    build: ./db-service
+    volumes:
+      - ./db-service:/usr/src/db-service
+    ports:
+      - "8000:8000"
+    environment:
+      BDB_ROOT_URL: http://192.168.0.36:49984 # This must be set, based on your computers IP address, if you want to run locally
+    depends_on:
+      - eth
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.2
+
+  eth-service:
+    # image: blockchainlg/eth-service${TAG}
+    # network_mode: "host"
+    build: ./eth-service
+    ports:
+      - "3001:3001"
+    environment:
+      NETWORK: "docker"    # used to correctly interact with ether client to deploy fresh contracts
+      SERVER_PORT: 3001
+      RPC_URL: http://eth  # TODO define this is prod as well, synchronicity issues exist...
+      RPC_PORT: 8545
+      HARYANA_PROXY_ADDR: 0  # TODO will need to define this / deploy it on boot?
+      ASSET_REGISTRY_ADDR: 0  # TODO will need to define this / deploy it on boot?
+      THREADS: 4
+    depends_on:
+      - eth
+      - db-service
+      - ipfs-service
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.5
+
+  land-registry-service:
+    # image: blockchainlg/land-registry-service${TAG}
+    build: ./land-registry-service
+    volumes:
+      - ./land-registry-service:/usr/src/land-registry-service
+    ports:
+      - "3002:3002"
+    environment:
+      DB_SERVICE: http://db-service:8000
+      ETH_SERVICE: http://eth-service:3001
+      IPFS_SERVICE: http://ipfs-service:3003
+      SERVER_PORT: 3002
+      THREADS: 4
+    depends_on:
+      - db-service
+      - eth-service
+      - ipfs-service
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.6
+
+networks:
+  testing_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
