@@ -8,7 +8,7 @@ const serverPort = argv['serverPort'];
 
 let server;
 
-describe('/assets GET', () => {
+describe('/ping GET', () => {
   before(async () => {
     server = app.listen(serverPort, () => {});
   });

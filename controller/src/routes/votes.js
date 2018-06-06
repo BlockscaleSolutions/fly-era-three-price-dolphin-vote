@@ -31,11 +31,12 @@ async function createVote(req, res, next) {
     }
 
     // Save the vote to the db to be created
-    const request = { participantIds, votersPerParticipant, duration, content };
-    const dbResponse = await sendAndCheckRequest(dbUrl, 'createVote', 'POST', request, 201);
+    let payload = { participantIds, votersPerParticipant, duration, content };
+    const { id, participantsRoot, contentHash } = await sendAndCheckRequest(dbUrl, 'createVote', 'POST', request, 201);
 
     // Save the vote on-chain, data returned from db
-    const ethResponse = await sendAndCheckRequest(ethUrl, 'createVote', 'POST', dbResponse, 201);
+    payload = { id, participantsRoot, contentHash, votesPerParticipant, duration };
+    const ethResponse = await sendAndCheckRequest(ethUrl, 'createVote', 'POST', payload, 201);
 
     const response = {
       id: dbResponse.id,

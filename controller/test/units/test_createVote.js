@@ -13,7 +13,7 @@ const serverPort = argv['serverPort'];
 
 let server;
 
-describe('/assets GET', () => {
+describe('/createVote POST', () => {
   before(async () => {
     server = app.listen(serverPort, () => {});
   });
@@ -23,7 +23,7 @@ describe('/assets GET', () => {
   });
 
   describe('Creating a vote with valid fields and a number of participants', () => {
-    it('should randomly generate the correct amount of ids', async () => {
+    it('should return the vote id and tx hash', async () => {
 
       // mock responses
       nock(argv['db-url'])
