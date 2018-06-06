@@ -21,7 +21,7 @@ const router = new Router();
  */
 async function createVote(req, res, next) {
   try {
-    const { participants, votersPerParticipant, duration, content } = req.body;
+    const { participants, votesPerParticipant, duration, content } = req.body;
 
     let participantIds = participants;
 
@@ -31,15 +31,15 @@ async function createVote(req, res, next) {
     }
 
     // Save the vote to the db to be created
-    let payload = { participantIds, votersPerParticipant, duration, content };
-    const { id, participantsRoot, contentHash } = await sendAndCheckRequest(dbUrl, 'createVote', 'POST', request, 201);
+    let payload = { participantIds, votesPerParticipant, duration, content };
+    const { id, participantsRoot, contentHash } = await sendAndCheckRequest(dbUrl, 'createVote', 'POST', payload, 201);
 
     // Save the vote on-chain, data returned from db
     payload = { id, participantsRoot, contentHash, votesPerParticipant, duration };
     const ethResponse = await sendAndCheckRequest(ethUrl, 'createVote', 'POST', payload, 201);
 
     const response = {
-      id: dbResponse.id,
+      id,
       txHash: ethResponse.txHash
     }
 
