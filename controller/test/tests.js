@@ -1,6 +1,7 @@
 //
 // Entry point for complete service test suite
 //
+const argv = require('../src/argv');
 const Mocha = require('mocha');
 const fs = require('fs');
 const path = require('path');
@@ -10,8 +11,10 @@ const mocha = new Mocha({
   timeout: 300000
 });
 
+const testDir = argv['test-dir'];
+
 // May pass in a custom test dir, ie. units or integration
-buildTestSuite(`./test/${process.env.TEST_DIR || ''}`);
+buildTestSuite(`./test/${testDir || ''}`);
 
 // START test suite
 runTestSuite();

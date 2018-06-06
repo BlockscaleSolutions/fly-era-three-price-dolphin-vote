@@ -2,7 +2,7 @@ const argv = require('../argv');
 const errors = require('restify-errors');
 const log = require('../logger');
 const { Router } = require('restify-router');
-const { generateParticipantIds, sendRequest } = require('../utils');
+const { generateParticipantIds, sendAndCheckRequest } = require('../utils');
 
 const dbUrl = argv['db-url'];
 const ethUrl = argv['eth-url'];
@@ -17,11 +17,12 @@ const router = new Router();
  * @param {Number} duration              Duration of the vote is milliseconds
  * @param {Array}  content               Array of objects representig the content of the vote.
  *                                       ie. questions and options.
- * @returns {Number} Generated id of the vote.
+ * @returns {Object} Vote id and txHash
  */
 async function createVote(req, res, next) {
   try {
     const { participants, votersPerParticipant, duration, content } = req.body;
+
     let participantIds = participants;
 
     // Generate the ids if the are not passed in
@@ -30,16 +31,18 @@ async function createVote(req, res, next) {
     }
 
     // Save the vote to the db to be created
-    const dbRequest = { participantIds, votersPerParticipant, duration, content };
-    let { statusCode, body } = await sendRequest(dbUrl, 'createVote', 'POST', dbRequest);
+    const request = { participantIds, votersPerParticipant, duration, content };
+    const dbResponse = await sendAndCheckRequest(dbUrl, 'createVote', 'POST', request, 201);
 
-    if (statusCode !== 201) {
-      throw new errors.BadRequestError('Creating the vote in the db failed');
+    // Save the vote on-chain, data returned from db
+    const ethResponse = await sendAndCheckRequest(ethUrl, 'createVote', 'POST', dbResponse, 201);
+
+    const response = {
+      id: dbResponse.id,
+      txHash: ethResponse.txHash
     }
 
-    const { id } = body;
-
-    res.send(201, { id });
+    res.send(201, response);
     return next();
   } catch (err) {
     return next(err);

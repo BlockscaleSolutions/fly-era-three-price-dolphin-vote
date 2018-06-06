@@ -1,7 +1,7 @@
 const { assert } = require('chai');
-const app = require('../src/server');
-const { sendRequest } = require('../src/utils');
-const argv = require('../src/argv');
+const app = require('../../src/server');
+const { sendRequest } = require('../../src/utils');
+const argv = require('../../src/argv');
 
 const apiUrl = argv['api-url'];
 const serverPort = argv['serverPort'];
