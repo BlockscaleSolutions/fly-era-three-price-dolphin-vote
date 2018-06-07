@@ -24,7 +24,8 @@ Creates a new vote on-chain. Returning the txHash.
 .. code-block:: javascript
 
   /**
-   * @param {Array} participantsRoot     Merkle root of the participant list.
+   * @param {String} id                  db id of this vote.
+   * @param {String} participantsRoot    Merkle root of the participant list, 32 byte.
    * @param {Number} votesPerParticipant Number of votes allocated to each participant.
    * @param {Number} duration            Duration of the vote is milliseconds.
    * @param {Array}  contentHash         IPFS hash of the content.
@@ -37,7 +38,7 @@ Creates a new vote on-chain. Returning the txHash.
   statusCode: 201
   body: {
           id: 1,
-          participantRoot: '0x16E6BEB3E080910740A2923D6091618CAA9968AEAD8A52D187D725D199548E2C',
+          participantRoot: '16E6BEB3E080910740A2923D6091618CAA9968AEAD8A52D187D725D199548E2C',
           contentHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
         }
 

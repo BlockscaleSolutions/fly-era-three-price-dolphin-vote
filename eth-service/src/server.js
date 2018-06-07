@@ -1,5 +1,4 @@
 const argv = require('./argv');
-const db = require('./db/api');
 const corsMiddleware = require('restify-cors-middleware');
 const log = require('./logger.js');
 const restify = require('restify');
@@ -19,9 +18,6 @@ const server = restify.createServer({
 start();
 
 async function start() {
-  // Start db instance for each server
-  await db.init();
-
   const cors = corsMiddleware({
     preflightMaxAge: 5, // optional
     origins: ['*'],

@@ -8,11 +8,11 @@ const PrettyStream = require('bunyan-prettystream');
 const prettyStdOut = new PrettyStream();
 prettyStdOut.pipe(process.stdout);
 
-let name = 'db-service';
+let name = 'eth-service';
 
 // If a worker thread append id to name
 if (cluster.worker) {
-  name = `db-service-${cluster.worker.id}`;
+  name = `eth-service-${cluster.worker.id}`;
 }
 
 // Init the actual logger

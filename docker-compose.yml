@@ -13,6 +13,15 @@ services:
       testing_net:
         ipv4_address: 172.28.1.1
 
+   # Eth node for testing purposes
+  eth:
+    image: trufflesuite/ganache-cli
+    ports:
+      - "8545:8545"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.4
+
   rethinkdb:
     build: ./rethinkdb
     ports:

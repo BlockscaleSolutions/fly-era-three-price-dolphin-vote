@@ -33,23 +33,6 @@ of participants returned and content pushed to ipfs.
    *                                       ie. questions and options.
    */
 
-- Success Response
-
-.. code-block:: console
-
-  statusCode: 201
-  body: {
-          id: 1,
-          participantRoot: '0x16E6BEB3E080910740A2923D6091618CAA9968AEAD8A52D187D725D199548E2C',
-          contentHash: 'QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG'
-        }
-
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Request
 
 .. code-block:: javascript
