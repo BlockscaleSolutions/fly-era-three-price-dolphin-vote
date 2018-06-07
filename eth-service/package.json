@@ -4,10 +4,11 @@
   "description": "Ethereum Microservice",
   "main": "cluster.js",
   "scripts": {
-    "build": "docker build -t eth-service .",
+    "build": "docker build -t blockchainlg/kc-eth-service .",
     "start": "node ./src/cluster",
-    "test": "node ./test/tests",
-    "unit-test": "node ./test/tests --test-dir units"
+    "test": "./scripts/test.sh",
+    "test-api": "./scripts/test-api.sh",
+    "test-contracts": "./scripts/test-contracts.sh"
   },
   "author": "Blockscale Solutions Inc.",
   "license": "ISC",
@@ -23,11 +24,13 @@
     "restify-cors-middleware": "^1.1.0",
     "restify-errors": "^5.0.0",
     "restify-router": "^0.5.0",
-    "truffle": "^4.1.11",
+    "web3": "0.18",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "mocha": "^5.0.1"
+    "ganache-cli": "^6.1.0",
+    "mocha": "^5.0.1",
+    "truffle": "^4.1.11"
   }
 }

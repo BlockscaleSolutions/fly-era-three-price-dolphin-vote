@@ -30,13 +30,13 @@ async function start() {
 
   // log every request
   server.pre((req, res, next) => {
-    req.log.info({ req, module: 'api' }, `New request from ${getIP(req)} on ${getMethodAPI(req)}`);
+    req.log.info({ req, module: 'controller' }, `New request from ${getIP(req)} on ${getMethodAPI(req)}`);
     next();
   });
 
   // log every error
   server.on('restifyError', (req, res, err, callback) => {
-    log.error({ module: 'api', err, version: req.headers['accept-version'] }, `Exception from ${getIP(req)} while requesting ${getMethodAPI(req)}`);
+    log.error({ module: 'controller', err, version: req.headers['accept-version'] }, `Exception from ${getIP(req)} while requesting ${getMethodAPI(req)}`);
     return callback();
   });
 

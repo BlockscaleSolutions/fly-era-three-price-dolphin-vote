@@ -1,0 +1,62 @@
+version: '3'
+services:
+  # Eth node for testing purposes
+  eth:
+    image: trufflesuite/ganache-cli
+    ports:
+      - "8545:8545"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.15
+
+  rethinkdb:
+    build: ../rethinkdb
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.14
+
+  db-service:
+    build: ../db-service
+    command: ["yarn", "start", "--db-host", "rethinkdb"]
+    volumes:
+      - ../db-service:/usr/src/db-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - rethinkdb
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.1
+
+  controller:
+    build: ../controller
+    # command: ["yarn", "start", "--db-host", "rethinkdb"]
+    ports:
+      - "3001:3001"
+    depends_on:
+      - eth-service
+      - db-service
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.2
+
+  eth-service:
+    build: ../eth-service
+    # command: ["yarn", "start", "--db-host", "rethinkdb"]
+    ports:
+      - "3002:3002"
+    depends_on:
+      - eth
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.3
+
+networks:
+  testing_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

@@ -1,0 +1,16 @@
+{
+  "name": "fly-era-three-price-dolphin-vote",
+  "version": "1.0.0",
+  "main": "deploy/docker-compose.yml",
+  "repository": "git@github.com:BlockscaleSolutions/fly-era-three-price-dolphin-vote.git",
+  "author": "Adam J Lemmon <adamjlemmon@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "deploy": "./scripts/deploy.sh",
+    "install": "./scripts/install.sh",
+    "push": "./scripts/push.sh",
+    "unit-test": "./scripts/unit-test.sh",
+    "integration-test": "./scripts/integration-test.sh"
+  }
+}

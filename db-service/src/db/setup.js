@@ -24,7 +24,7 @@ async function setup(conn, dbName) {
   conn.use(dbName);
 
   try {
-    await createTables(conn);
+    return await createTables(conn);
   } catch (err) {
     log.error({ module: 'db' }, `Error creating tables: ${err.message}`);
   }
@@ -38,25 +38,23 @@ async function setup(conn, dbName) {
 async function createTables(conn) {
   let table;
 
-  // get list of tables and compare against required
-  const requiredTables = config.tables;
-  const tableList = await r.tableList().run(conn);
+  return new Promise(async (resolve, reject) => {
+    // get list of tables and compare against required
+    const requiredTables = config.tables;
+    const tableList = await r.tableList().run(conn);
 
-  return new Promise((resolve, reject) => {
     for (let i = 0, len = requiredTables.length; i < len; i += 1) {
       table = requiredTables[i];
 
       if (tableList.indexOf(table) === -1) {
         log.info({ module: 'db' }, `Table "${table}" not found... creating now...`);
 
-        r.tableCreate(table).run(conn, (res, err) => {
-          if (err) reject(err);
-        });
+        await r.tableCreate(table).run(conn);
 
         log.info({ module: 'db' }, `Table "${table}" created.`);
       }
     }
-    resolve();
+    resolve(conn);
   });
 }
 

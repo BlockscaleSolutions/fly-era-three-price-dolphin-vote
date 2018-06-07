@@ -2,5 +2,21 @@ language: node_js
 node_js:
   - "9.3.0"
 
-install: cd controller && yarn
-script: yarn unit-test
+# Install dependencies for each module and build docker images
+install: yarn install
+
+# Build the images to test against
+before_script: yarn build
+
+# Run test suites against built images
+script:
+  - yarn unit-test
+  - yarn integration-test
+
+# Set git status and push images
+after_success:
+  - echo "success, set git status"
+  - yarn deploy
+
+# After failure
+after_failure: echo "failure, set git status"

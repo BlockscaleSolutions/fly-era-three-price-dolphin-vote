@@ -4,7 +4,7 @@
   "description": "Controller Microservice",
   "main": "cluster.js",
   "scripts": {
-    "build": "docker build -t controller .",
+    "build": "docker build -t blockchainlg/kc-controller .",
     "start": "node ./src/cluster",
     "test": "node ./test/tests",
     "unit-test": "node ./test/tests --test-dir units",

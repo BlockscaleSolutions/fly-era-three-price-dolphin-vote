@@ -1,7 +1,7 @@
 const argv = require('../argv');
 const log = require('../logger');
 const r = require('rethinkdb');
-const { setup, createUsers } = require('./index');
+const { setup, createUsers, connect } = require('./index');
 const ipfs = require('./ipfs');
 const merkle = require('./merkle');
 
@@ -16,10 +16,11 @@ async function init() {
 
     const host = argv['db-host'];
     const port = argv['db-port'];
-    conn = await r.connect({ host, port });
+
+    conn = await connect(host, port);
 
     const dbName = argv['db-name'];
-    await setup(conn, dbName);
+    conn = await setup(conn, dbName);
 
     log.info({ module: 'db' }, 'Successfully conncted to db.');
   } catch (err) {
