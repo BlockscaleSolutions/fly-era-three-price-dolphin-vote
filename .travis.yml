@@ -4,6 +4,12 @@ node_js:
 
 sudo: required
 
+# env:
+#   - DOCKER_USER:
+#     - secure:
+#   - DOCKER_PASS:
+#     - secure:
+
 services:
   - docker
 
@@ -23,7 +29,7 @@ script:
 # Set git status and push images
 after_success:
   - echo "success, set git status"
-  - yarn deploy
+  - echo "TODO docker login and yarn deploy"
 
 # After failure
 after_failure:

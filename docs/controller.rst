@@ -32,22 +32,6 @@ of participants returned and content pushed to ipfs, hash returned.
   *                                       ie. questions and options.
   */
 
-- Success Response
-
-.. code-block:: console
-
-  statusCode: 201
-  body: {
-          id: 1,
-          txHash: '0x7f480f9b52ae4cfe8ff8b607c46c795482f9543264c1b61d7032715b1e1eb66e'
-        }
-
-- Error Response
-
-.. code-block:: console
-
-  TODO
-
 - Sample Request
 
 .. code-block:: javascript

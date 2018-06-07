@@ -27,7 +27,7 @@ Creates a new vote on-chain. Returning the txHash.
    * @param {Number} votesPerParticipant Number of votes allocated to each participant.
    * @param {Number} duration            Duration of the vote is milliseconds.
    * @param {String} id                  db id of this vote.
-   * @param {String} participantsRoot    Merkle root of the participant list, 32 byte.
+   * @param {String} participantsRoot    Merkle root of the participant list, 32 byte in HEX format. 0x will be added if not passed.
    * @param {Array}  contentHash         IPFS hash of the content.
    */
 

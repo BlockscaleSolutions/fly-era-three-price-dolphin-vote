@@ -20,12 +20,17 @@ const router = new Router();
  * @param {Number} votesPerParticipant Number of votes allocated to each participant.
  * @param {Number} duration            Duration of the vote is milliseconds.
  * @param {String} id                  db id of this vote.
- * @param {String} participantsRoot    Merkle root of the participant list, 32 byte.
+ * @param {String} participantsRoot    Merkle root of the participant list in HEX, 32 byte. 0x will be added if not there.
  * @param {Array}  contentHash         IPFS hash of the content.
  * @returns {Object} txHash
  */
 async function createVote(req, res, next) {
   try {
+    // Append 0x to the merkle root so it will be stored in same format(hex) on-chain
+    if (req.body.participantsRoot.substring(0, 2) !== '0x') {
+      req.body.participantsRoot = req.body.participantsRoot + '0x';
+    }
+
     const gas = await estimateGas(voteRegistry, 'createVote', req.body);
 
     log.info({ module: 'eth' }, `Gas estimation for transaction is ${gas}`);
