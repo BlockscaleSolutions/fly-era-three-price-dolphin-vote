@@ -2,11 +2,18 @@ language: node_js
 node_js:
   - "9.3.0"
 
+sudo: required
+
+services:
+  - docker
+
 # Install dependencies for each module and build docker images
-install: yarn install
+install:
+  - yarn install
 
 # Build the images to test against
-before_script: yarn build
+before_script:
+  - yarn build
 
 # Run test suites against built images
 script:
@@ -19,4 +26,5 @@ after_success:
   - yarn deploy
 
 # After failure
-after_failure: echo "failure, set git status"
+after_failure:
+  - echo "failure, set git status"
